@@ -1,12 +1,57 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-	<title>Hello World</title>
-	<script src="sdk/scripts/SDK.js"></script>
+    <meta charset="utf-8" />
+    <title>AI Wiki Documenter</title>
+
+    <!-- CSP meta tag to allow Microsoft authentication and monitoring -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.microsoft.com https://*.microsoftonline.com https://*.msftauth.net https://*.azure.com https://*.visualstudio.com https://dev.azure.com https://*.vsassets.io https://*.gallerycdn.vsassets.io;
+        connect-src 'self' https://*.microsoft.com https://*.microsoftonline.com https://*.msftauth.net https://*.azure.com https://*.visualstudio.com https://dev.azure.com https://amcdn.msftauth.net https://js.monitor.azure.com https://*.vsassets.io https://*.gallerycdn.vsassets.io https://*.blob.core.windows.net;
+        style-src 'self' 'unsafe-inline' https://*.microsoft.com https://*.azure.com https://*.visualstudio.com https://*.vsassets.io;
+        img-src 'self' data: blob: https://*.microsoft.com https://*.azure.com https://*.visualstudio.com https://*.vsassets.io;
+        font-src 'self' data: https://*.microsoft.com https://*.azure.com https://*.vsassets.io;
+        frame-ancestors 'self' https://dev.azure.com https://*.visualstudio.com https://*.azure.com;
+    ">
+
+    <!-- Load Azure DevOps SDK -->
+    <script src="sdk/scripts/SDK.min.js"></script>
 </head>
 <body>
-	<script type="text/javascript">SDK.init();</script>
-	<h1>Hello World</h1>
-	<script type="text/javascript">SDK.notifyLoadSucceeded();</script>
+    <div style="padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <h1>🤖 AI Wiki Documenter</h1>
+        <p>Welcome to the AI Wiki Documenter extension!</p>
+        <p>This extension helps generate documentation for your pull requests using AI.</p>
+
+        <div id="content">
+            <h2>Getting Started</h2>
+            <ul>
+                <li>Navigate to a pull request</li>
+                <li>Click "Add Documentation" from the actions menu</li>
+                <li>Let AI generate documentation for your changes</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Initialize VSS SDK
+        VSS.init({
+            explicitNotifyLoaded: true,
+            usePlatformStyles: true
+        });
+
+        // Register with the VSS SDK
+        VSS.ready(function() {
+            console.log("AI Wiki Documenter extension loaded successfully!");
+
+            // Get the current project context
+            var webContext = VSS.getWebContext();
+            console.log("Project: " + webContext.project.name);
+
+            // Notify that the extension is ready
+            VSS.notifyLoadSucceeded();
+        });
+    </script>
 </body>
 </html>
