@@ -47,6 +47,23 @@
     </div>
 
     <script>
+        // Try to initialize VSS if available, but don't break if it's not
+        try {
+            if (typeof VSS !== 'undefined') {
+                VSS.init({
+                    explicitNotifyLoaded: true,
+                    usePlatformStyles: true
+                });
+
+                VSS.ready(function() {
+                    console.log('VSS SDK ready');
+                    VSS.notifyLoadSucceeded();
+                });
+            }
+        } catch (e) {
+            console.log('VSS SDK not available, continuing without it');
+        }
+
         function testFunction() {
             document.getElementById('status').innerHTML = '🚀 Test button clicked! Extension is working perfectly.';
             console.log('AI Wiki Documenter: Test function executed successfully');
@@ -68,8 +85,17 @@
 
             // Show that we've loaded without errors
             setTimeout(function() {
-                document.getElementById('status').innerHTML = '🎉 Extension fully loaded - No CSP errors!';
-            }, 2000);
+                document.getElementById('status').innerHTML = '🎉 Extension fully loaded - Ready to use!';
+
+                // Try to notify completion if VSS is available
+                try {
+                    if (typeof VSS !== 'undefined' && VSS.notifyLoadSucceeded) {
+                        VSS.notifyLoadSucceeded();
+                    }
+                } catch (e) {
+                    // Continue without VSS
+                }
+            }, 1000);
         });
     </script>
 </body>
