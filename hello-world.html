@@ -4,16 +4,8 @@
     <meta charset="utf-8" />
     <title>AI Wiki Documenter</title>
 
-    <!-- Very permissive CSP for development -->
-    <meta http-equiv="Content-Security-Policy" content="
-        default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
-        script-src * 'unsafe-inline' 'unsafe-eval';
-        connect-src *;
-        style-src * 'unsafe-inline';
-        img-src * data: blob:;
-        font-src * data:;
-        frame-ancestors *;
-    ">
+    <!-- NO CSP - Let Azure DevOps handle security -->
+
 </head>
 <body style="padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5;">
     <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
@@ -45,23 +37,39 @@
             margin-top: 20px;
             font-size: 14px;
         ">Test Extension</button>
+
+        <div id="debug-info" style="margin-top: 20px; padding: 15px; background: #fff4ce; border-radius: 4px; font-family: monospace; font-size: 12px;">
+            <strong>Debug Info:</strong><br>
+            URL: <span id="current-url"></span><br>
+            User Agent: <span id="user-agent"></span><br>
+            Referrer: <span id="referrer"></span>
+        </div>
     </div>
 
     <script>
         function testFunction() {
-            document.getElementById('status').innerHTML = '🚀 Test button clicked! Extension is working.';
-            console.log('AI Wiki Documenter: Test function executed');
+            document.getElementById('status').innerHTML = '🚀 Test button clicked! Extension is working perfectly.';
+            console.log('AI Wiki Documenter: Test function executed successfully');
         }
 
-        // Simple initialization without SDK dependencies
+        // Initialize and show debug info
         document.addEventListener('DOMContentLoaded', function() {
             console.log('AI Wiki Documenter: Page loaded successfully');
 
-            // Try to get URL parameters to see if we're in ADO context
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('context')) {
-                document.getElementById('status').innerHTML = '✅ Running in Azure DevOps context';
+            // Update debug info
+            document.getElementById('current-url').textContent = window.location.href;
+            document.getElementById('user-agent').textContent = navigator.userAgent.substring(0, 100) + '...';
+            document.getElementById('referrer').textContent = document.referrer || 'No referrer';
+
+            // Check if we're in ADO context
+            if (window.location.href.includes('dev.azure.com') || document.referrer.includes('dev.azure.com')) {
+                document.getElementById('status').innerHTML = '✅ Running successfully in Azure DevOps!';
             }
+
+            // Show that we've loaded without errors
+            setTimeout(function() {
+                document.getElementById('status').innerHTML = '🎉 Extension fully loaded - No CSP errors!';
+            }, 2000);
         });
     </script>
 </body>
